@@ -16,7 +16,46 @@ class MyApp extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Container(
-          child: const Text("Hello World"),
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+                Color.fromARGB(255, 1, 48, 110),
+                Color.fromARGB(255, 198, 217, 243),
+              ],
+            ),
+          ),
+          child: const Center(
+            child: Wrap(
+              children: [
+                Text(
+                  'Hello Gradient!',
+                  style: TextStyle(
+                    fontSize: 48.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  'Hello Gradient!',
+                  style: TextStyle(
+                    fontSize: 48.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  'Hello Gradient!',
+                  style: TextStyle(
+                    fontSize: 48.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
