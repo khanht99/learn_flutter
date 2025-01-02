@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:section_2/gradient_container.dart';
 
 void main() {
   runApp(
@@ -13,50 +14,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
-        child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                Color.fromARGB(255, 1, 48, 110),
-                Color.fromARGB(255, 198, 217, 243),
-              ],
-            ),
-          ),
-          child: const Center(
-            child: Wrap(
-              children: [
-                Text(
-                  'Hello Gradient!',
-                  style: TextStyle(
-                    fontSize: 48.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                Text(
-                  'Hello Gradient!',
-                  style: TextStyle(
-                    fontSize: 48.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                Text(
-                  'Hello Gradient!',
-                  style: TextStyle(
-                    fontSize: 48.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        child: GradientContainer(
+            null, Alignment.bottomRight, [Colors.brown, Colors.yellowAccent]),
       ),
     );
   }
