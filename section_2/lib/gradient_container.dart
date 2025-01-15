@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:section_2/text_styled.dart';
+import 'package:section_2/roll_dice.dart';
 
 class GradientContainer extends StatelessWidget {
-  const GradientContainer(Alignment? begin, end, this.colors, {super.key}) : beginTest = begin ?? Alignment.topLeft, endTest = end;
+  const GradientContainer(Alignment? begin, end, this.colors, {super.key})
+      : beginTest = begin ?? Alignment.topLeft,
+        endTest = end;
 
   final Alignment beginTest;
   final Alignment endTest;
@@ -19,12 +21,9 @@ class GradientContainer extends StatelessWidget {
         ),
       ),
       child: const Center(
-        child: Wrap(
-          children: [
-            TextStyled(displayText: "Hello text 1"),
-            TextStyled(displayText: "Hello text 2"),
-            TextStyled(displayText: "Hello text 3"),
-          ],
+        child: Padding(
+          padding: EdgeInsets.all(50.0),
+          child: RollDice(),
         ),
       ),
     );
