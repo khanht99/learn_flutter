@@ -16,51 +16,33 @@ class Quiz extends StatefulWidget {
 class _QuizState extends State<Quiz> {
   var activeScreen = "start-screen";
 
-  var currentQuestion = 0;
+  
 
   Map<int, int> answerHistory = {};
-
-  void selectAnswer(int selectedIndex) {
-    if (currentQuestion < listQuestion.length - 1) {
-      setState(() {
-        answerHistory[currentQuestion] = selectedIndex;
-        currentQuestion++;
-      });
-    } else {
-      setState(() {
-        activeScreen = "complete-screen";
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    activeScreen = "start-screen";
-  }
 
   void startQuiz() {
     setState(() {
       activeScreen = "question-screen";
-    });
+  });
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget screenWidget = LaunchScreen(startQuiz: startQuiz);
+    var currentQuestionIndex = 0;
+
+    if(activeScreen == "question-screen") {
+      screenWidget = QuestionScreen(() {
+        print("on tap");
+        
+      });
+    } else if(activeScreen == "complete-screen") {
+
+    }
+
     return MaterialApp(
       home: Scaffold(
-        body: activeScreen == "start-screen"
-            ? LaunchScreen(
-                startQuiz: startQuiz,
-              )
-            : (activeScreen == "question-screen"
-                ? QuestionScreen(
-                    selectAnswer: (int index) {
-                      selectAnswer(index);
-                    },
-                    currentQuestion: currentQuestion,
-                  )
-                : CompleteScreen(answerHistory: answerHistory)),
+        body: screenWidget,
       ),
     );
   }

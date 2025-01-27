@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:section_3/data/question_collect.dart';
 import 'package:collection/collection.dart';
+import 'package:section_3/model/question.dart';
 
 class QuestionScreen extends StatefulWidget {
-  final Function(int) selectAnswer;
-  final int currentQuestion;
+  const QuestionScreen(this.onTap, {super.key});
 
-  const QuestionScreen({super.key, required this.selectAnswer, required this.currentQuestion});
+  final void Function() onTap;
 
   @override
   State<QuestionScreen> createState() {
@@ -15,9 +15,20 @@ class QuestionScreen extends StatefulWidget {
 }
 
 class _QuestionScreenState extends State<QuestionScreen> {
-  
+  var currentQuestionIndex = 0;
+
+  void nextQuestion() {
+    setState(() {
+      if (currentQuestionIndex < listQuestion.length - 1) {
+        currentQuestionIndex++;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final currentQuestion = listQuestion[currentQuestionIndex];
+
     return Container(
       color: Color.fromRGBO(134, 195, 242, 1),
       padding: EdgeInsets.symmetric(horizontal: 20),
@@ -26,16 +37,16 @@ class _QuestionScreenState extends State<QuestionScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              listQuestion[widget.currentQuestion].title,
+              currentQuestion.title,
               textAlign: TextAlign.center,
             ),
             SizedBox(
               height: 30,
             ),
-            ...listQuestion[widget.currentQuestion].answers.mapIndexed((index, element) {
+            ...currentQuestion.answers.map((element) {
               return ElevatedButton(
                 onPressed: () {
-                  widget.selectAnswer(index);
+                  nextQuestion();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color.fromRGBO(3, 84, 145, 1),
