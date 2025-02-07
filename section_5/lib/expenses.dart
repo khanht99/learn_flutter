@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:section_5/model/expense.dart';
 import 'package:section_5/widget/expense_list.dart';
+import 'package:section_5/widget/new_expense.dart';
 
 class Expenses extends StatefulWidget {
   const Expenses({super.key});
@@ -38,7 +39,7 @@ class _ExpenseState extends State<Expenses> {
         context: context,
         isScrollControlled: true,
         builder: (ctx) {
-          return const Text("Modal sheet");
+          return const NewExpense();
         });
   }
 
