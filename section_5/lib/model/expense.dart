@@ -9,7 +9,7 @@ final formatter = DateFormat('yyyy-MM-dd');
 
 final categoryIcon = {
   Category.food: Icons.cake,
-  Category.travel: Icons.luggage,
+  Category.travel: Icons.travel_explore,
   Category.work: Icons.work,
   Category.leisure: Icons.movie
 };

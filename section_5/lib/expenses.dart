@@ -4,7 +4,9 @@ import 'package:section_5/widget/expense_list.dart';
 import 'package:section_5/widget/new_expense.dart';
 
 class Expenses extends StatefulWidget {
-  const Expenses({super.key});
+  const Expenses({
+    super.key,
+  });
 
   @override
   State<Expenses> createState() {
@@ -13,38 +15,54 @@ class Expenses extends StatefulWidget {
 }
 
 class _ExpenseState extends State<Expenses> {
-  List<Expense> expenseList = [
-    Expense(
-        title: "expense 1",
-        amount: 19.99,
-        date: DateTime.now(),
-        category: Category.food,
-        icon: categoryIcon[Category.food]!),
-    Expense(
-        title: "expense 2",
-        amount: 29.99,
-        date: DateTime.now(),
-        category: Category.leisure,
-        icon: categoryIcon[Category.leisure]!),
-    Expense(
-        title: "expense 3",
-        amount: 39.99,
-        date: DateTime.now(),
-        category: Category.work,
-        icon: categoryIcon[Category.work]!),
-  ];
+  List<Expense> expenseList = [];
 
-  void addExpense() {
+  void _addExpense(Expense newExpense) {
+    setState(() {
+      expenseList.add(newExpense);
+    });
+  }
+
+  void _handleShowModalAddNewExpense() {
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
         builder: (ctx) {
-          return const NewExpense();
+          return NewExpense(addExpense: _addExpense);
         });
+  }
+
+  void _removeExpense(Expense dismissibleExpense) {
+    final indexItem = expenseList.indexOf(dismissibleExpense);
+
+    setState(() {
+      expenseList.remove(dismissibleExpense);
+    });
+
+    ScaffoldMessenger.of(context).clearSnackBars();   
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 1),
+        content: const Text("Expense deleted!"),
+        action: SnackBarAction(
+            label: "Undo",
+            onPressed: () {
+              setState(() {
+                expenseList.insert(indexItem, dismissibleExpense);
+              });
+            }),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget mainContent = const Text('No expense found. Start adding some!');
+
+    if (expenseList.isNotEmpty) {
+      mainContent = ExpenseList(expenseList, _removeExpense);
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -54,13 +72,13 @@ class _ExpenseState extends State<Expenses> {
         backgroundColor: Color.fromARGB(255, 236, 153, 36),
         actions: [
           IconButton(
-            onPressed: addExpense,
+            onPressed: _handleShowModalAddNewExpense,
             icon: const Icon(Icons.add),
           ),
         ],
       ),
       body: Center(
-        child: ExpenseList(expenseList),
+        child: mainContent,
       ),
     );
   }

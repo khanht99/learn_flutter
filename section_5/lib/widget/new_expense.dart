@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:section_5/model/expense.dart';
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({super.key});
+  const NewExpense({super.key, required Function(Expense) this.addExpense});
+
+  final void Function(Expense) addExpense;
 
   @override
   State<StatefulWidget> createState() {
@@ -14,7 +16,7 @@ class _NewExpenseState extends State<NewExpense> {
   var titleController = TextEditingController();
   var amountController = TextEditingController();
   DateTime? selectedDate;
-  Category selectedCategory = Category.leisure;
+  Category selectedCategory = Category.food;
 
   @override
   void dispose() {
@@ -37,6 +39,39 @@ class _NewExpenseState extends State<NewExpense> {
         });
       }
     });
+  }
+
+  void _handleAddExpense() {
+    if (titleController.text.isEmpty ||
+        selectedDate == null ||
+        amountController.text.isEmpty ||
+        double.parse(amountController.text) < 0) {
+      showDialog(
+          context: context,
+          builder: (ctx) {
+            return AlertDialog(
+              title: Text("Invalid Input"),
+              content: Text(
+                  "Please make sure a valid title, amount, date and category was entered"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                  },
+                  child: Text("Okay"),
+                ),
+              ],
+            );
+          });
+      return;
+    }
+    widget.addExpense(Expense(
+        title: titleController.text,
+        amount: double.parse(amountController.text),
+        date: selectedDate!,
+        category: selectedCategory,
+        icon: categoryIcon[selectedCategory]!));
+        Navigator.pop(context);
   }
 
   @override
@@ -111,9 +146,7 @@ class _NewExpenseState extends State<NewExpense> {
                   child: Text('Cancel'),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    print(titleController.text);
-                  },
+                  onPressed: _handleAddExpense,
                   child: Text("Add Expense"),
                 ),
               ],
