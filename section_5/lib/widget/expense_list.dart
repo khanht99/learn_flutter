@@ -10,20 +10,20 @@ class ExpenseList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ListView.builder(
-        itemCount: expenseList.length,
-        itemBuilder: (ctx, index) => Dismissible(
-          key: ValueKey(expenseList[index]),
-          child: ExpenseItem(expenseList[index]),
-          onDismissed: (direction) {
-            if (expenseList.isNotEmpty) {
-              print('index' + index.toString());
-              print('expenseList: ' + expenseList.toString());
-              removeExpense(expenseList[index]);
-            }
-          },
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView.builder(
+          itemCount: expenseList.length,
+          itemBuilder: (ctx, index) => Dismissible(
+            key: ValueKey(expenseList[index]),
+            child: ExpenseItem(expenseList[index]),
+            onDismissed: (direction) {
+              if (expenseList.isNotEmpty) {
+                removeExpense(expenseList[index]);
+              }
+            },
+          ),
         ),
       ),
     );

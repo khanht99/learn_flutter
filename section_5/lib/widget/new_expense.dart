@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:section_5/model/expense.dart';
+import 'dart:io';
 
 class NewExpense extends StatefulWidget {
   const NewExpense({super.key, required Function(Expense) this.addExpense});
@@ -46,23 +48,44 @@ class _NewExpenseState extends State<NewExpense> {
         selectedDate == null ||
         amountController.text.isEmpty ||
         double.parse(amountController.text) < 0) {
-      showDialog(
-          context: context,
-          builder: (ctx) {
-            return AlertDialog(
-              title: Text("Invalid Input"),
-              content: Text(
-                  "Please make sure a valid title, amount, date and category was entered"),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(ctx);
-                  },
-                  child: Text("Okay"),
-                ),
-              ],
-            );
-          });
+      if (Platform.isIOS) {
+        showCupertinoDialog(
+            context: context,
+            builder: (ctx) {
+              return CupertinoAlertDialog(
+                title: Text("Invalid Input"),
+                content: Text(
+                    "Please make sure a valid title, amount, date and category was entered"),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(ctx);
+                    },
+                    child: Text("Okay"),
+                  ),
+                ],
+              );
+            });
+      } else {
+        showDialog(
+            context: context,
+            builder: (ctx) {
+              return AlertDialog(
+                title: Text("Invalid Input"),
+                content: Text(
+                    "Please make sure a valid title, amount, date and category was entered"),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(ctx);
+                    },
+                    child: Text("Okay"),
+                  ),
+                ],
+              );
+            });
+      }
+
       return;
     }
     widget.addExpense(Expense(
@@ -71,13 +94,12 @@ class _NewExpenseState extends State<NewExpense> {
         date: selectedDate!,
         category: selectedCategory,
         icon: categoryIcon[selectedCategory]!));
-        Navigator.pop(context);
+    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.5,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

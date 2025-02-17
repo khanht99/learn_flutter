@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:section_5/model/expense.dart';
+import 'package:section_5/widget/chart.dart';
 import 'package:section_5/widget/expense_list.dart';
 import 'package:section_5/widget/new_expense.dart';
 
@@ -39,7 +41,7 @@ class _ExpenseState extends State<Expenses> {
       expenseList.remove(dismissibleExpense);
     });
 
-    ScaffoldMessenger.of(context).clearSnackBars();   
+    ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: const Duration(seconds: 1),
@@ -60,7 +62,24 @@ class _ExpenseState extends State<Expenses> {
     Widget mainContent = const Text('No expense found. Start adding some!');
 
     if (expenseList.isNotEmpty) {
-      mainContent = ExpenseList(expenseList, _removeExpense);
+      mainContent = LayoutBuilder(builder: (context, constraints) {
+        final width = constraints.maxWidth;
+        if (width > 600) {
+          return Row(
+            children: [
+              Chart(expenses: expenseList),
+              ExpenseList(expenseList, _removeExpense),
+            ],
+          );
+        } else {
+          return Column(
+            children: [
+              Chart(expenses: expenseList),
+              ExpenseList(expenseList, _removeExpense),
+            ],
+          );
+        }
+      });
     }
 
     return Scaffold(
@@ -69,7 +88,6 @@ class _ExpenseState extends State<Expenses> {
           "Flutter Expense Tracker",
           textAlign: TextAlign.start,
         ),
-        backgroundColor: Color.fromARGB(255, 236, 153, 36),
         actions: [
           IconButton(
             onPressed: _handleShowModalAddNewExpense,
@@ -77,8 +95,13 @@ class _ExpenseState extends State<Expenses> {
           ),
         ],
       ),
-      body: Center(
-        child: mainContent,
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Center(
+          child: mainContent,
+        ),
       ),
     );
   }
