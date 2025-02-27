@@ -7,7 +7,9 @@ import 'package:section_8/screen/meals.dart';
 import 'package:section_8/widget/category_grid_item.dart';
 
 class Categories extends StatelessWidget {
-  const Categories({super.key});
+  const Categories({super.key, required this.onToggleStar});
+
+final void Function(Meal) onToggleStar;
 
   void _selectCategory(BuildContext context, Category category) {
     List<Meal> meals = dummyMeals
@@ -16,7 +18,7 @@ class Categories extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (cxt) {
-          return Meals(meals: meals, title: category.title);
+          return Meals(meals: meals, title: category.title, onToggleStar: onToggleStar,);
         },
       ),
     );
@@ -24,25 +26,20 @@ class Categories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Pick your category"),
+    return GridView.builder(
+      padding: EdgeInsets.all(16),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisSpacing: 20,
+        mainAxisSpacing: 20,
+        crossAxisCount: 2,
       ),
-      body: GridView.builder(
-        padding: EdgeInsets.all(16),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisSpacing: 20,
-          mainAxisSpacing: 20,
-          crossAxisCount: 2,
-        ),
-        itemCount: availableCategories.length,
-        itemBuilder: (BuildContext context, int index) {
-          return CategoryGridItem(
-            category: availableCategories[index],
-            onSelectItem: _selectCategory,
-          );
-        },
-      ),
+      itemCount: availableCategories.length,
+      itemBuilder: (BuildContext context, int index) {
+        return CategoryGridItem(
+          category: availableCategories[index],
+          onSelectItem: _selectCategory,
+        );
+      },
     );
   }
 }

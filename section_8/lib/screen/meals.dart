@@ -4,16 +4,21 @@ import 'package:section_8/screen/meal_detail.dart';
 import 'package:section_8/widget/meal_item.dart';
 
 class Meals extends StatelessWidget {
-  const Meals({super.key, required this.meals, required this.title});
+  const Meals(
+      {super.key, required this.meals, this.title, required this.onToggleStar});
 
   final List<Meal> meals;
-  final String title;
+  final String? title;
+  final void Function(Meal) onToggleStar;
 
   void _selectMeal(BuildContext context, Meal meal) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (ctx) {
-          return MealDetail(meal: meal);
+          return MealDetail(
+            meal: meal,
+            onToggleStar: onToggleStar,
+          );
         },
       ),
     );
@@ -52,11 +57,15 @@ class Meals extends StatelessWidget {
       );
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: content,
-    );
+    if (title != null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(title!),
+        ),
+        body: content,
+      );
+    } else {
+      return content;
+    }
   }
 }

@@ -3,9 +3,10 @@ import 'package:section_8/model/meal.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class MealDetail extends StatefulWidget {
-  const MealDetail({super.key, required this.meal});
+  const MealDetail({super.key, required this.meal, required this.onToggleStar});
 
   final Meal meal;
+  final void Function(Meal) onToggleStar;
 
   @override
   State<MealDetail> createState() => _MealDetailState();
@@ -17,6 +18,14 @@ class _MealDetailState extends State<MealDetail> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.meal.title),
+        actions: [
+          IconButton(
+            onPressed: () {
+              widget.onToggleStar(widget.meal);
+            },
+            icon: Icon(Icons.star),
+          ),
+        ],
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -46,6 +55,7 @@ class _MealDetailState extends State<MealDetail> {
                   child: Text(
                     item,
                     style: TextStyle(color: Colors.white),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               SizedBox(
@@ -56,9 +66,10 @@ class _MealDetailState extends State<MealDetail> {
                 child: Text(
                   "Steps",
                   style: TextStyle(
-                      color: Colors.orange,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
+                    color: Colors.orange,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
                 ),
               ),
               for (final item in widget.meal.steps)
@@ -67,6 +78,7 @@ class _MealDetailState extends State<MealDetail> {
                   child: Text(
                     item,
                     style: TextStyle(color: Colors.white),
+                    textAlign: TextAlign.center,
                   ),
                 ),
             ],
