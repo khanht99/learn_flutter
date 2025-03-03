@@ -1,24 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:section_8/data/categories.dart';
-import 'package:section_8/data/meals.dart';
 import 'package:section_8/model/category.dart';
 import 'package:section_8/model/meal.dart';
 import 'package:section_8/screen/meals.dart';
 import 'package:section_8/widget/category_grid_item.dart';
 
 class Categories extends StatelessWidget {
-  const Categories({super.key, required this.onToggleStar});
+  const Categories(
+      {super.key, required this.onToggleStar, required this.filterMeals});
 
-final void Function(Meal) onToggleStar;
+  final void Function(Meal) onToggleStar;
+  final List<Meal> filterMeals;
 
   void _selectCategory(BuildContext context, Category category) {
-    List<Meal> meals = dummyMeals
+    List<Meal> meals = filterMeals
         .where((meal) => meal.categories.contains(category.id))
         .toList();
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (cxt) {
-          return Meals(meals: meals, title: category.title, onToggleStar: onToggleStar,);
+          return Meals(
+            meals: meals,
+            title: category.title,
+            onToggleStar: onToggleStar,
+          );
         },
       ),
     );
