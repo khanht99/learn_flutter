@@ -7,9 +7,8 @@ import 'package:section_8/widget/category_grid_item.dart';
 
 class Categories extends StatelessWidget {
   const Categories(
-      {super.key, required this.onToggleStar, required this.filterMeals});
+      {super.key, required this.filterMeals});
 
-  final void Function(Meal) onToggleStar;
   final List<Meal> filterMeals;
 
   void _selectCategory(BuildContext context, Category category) {
@@ -22,7 +21,6 @@ class Categories extends StatelessWidget {
           return Meals(
             meals: meals,
             title: category.title,
-            onToggleStar: onToggleStar,
           );
         },
       ),

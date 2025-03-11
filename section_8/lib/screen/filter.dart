@@ -1,48 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:section_8/providers/filter_provider.dart';
 
 enum FilterCategory {
   isGlutenFree, isLactoseFree, isVegetarian, isVegan
 }
-class Filter extends StatefulWidget {
-  const Filter({super.key, required this.filterValue});
-
-  final Map<FilterCategory, bool> filterValue;
+class FilterScreen extends ConsumerWidget {
+  const FilterScreen({super.key});
 
   @override
-  State<Filter> createState() {
-    return _FilterState();
-  }
-}
-
-class _FilterState extends State<Filter> {
-  bool isGlutenFree = false;
-  bool isLactoseFree = false;
-  bool isVegetarianMeals = false;
-  bool isVeganMeals = false;
-
-  @override
-  void initState() {
-    super.initState();
-    isGlutenFree = widget.filterValue[FilterCategory.isGlutenFree]!;
-    isLactoseFree = widget.filterValue[FilterCategory.isLactoseFree]!;
-    isVegetarianMeals = widget.filterValue[FilterCategory.isVegetarian]!;
-    isVeganMeals = widget.filterValue[FilterCategory.isVegan]!;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) {
-        if(didPop) return;
-        Navigator.of(context).pop({
-          FilterCategory.isGlutenFree: isGlutenFree,
-          FilterCategory.isLactoseFree: isLactoseFree,
-          FilterCategory.isVegetarian: isVegetarianMeals,
-          FilterCategory.isVegan: isVeganMeals
-        });
-      },
-      child: SafeArea(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final filterValue = ref.watch(filtersProvider);
+    return SafeArea(
         child: Scaffold(
           appBar: AppBar(
             title: Text("Filters"),
@@ -52,47 +21,38 @@ class _FilterState extends State<Filter> {
               SwitchListTile(
                 title: Text("Gluten-free"),
                 subtitle: Text("Only include gluten-free meals"),
-                value: isGlutenFree,
+                value: filterValue[FilterCategory.isGlutenFree]!,
                 onChanged: (val) {
-                  setState(() {
-                    isGlutenFree = val;
-                  });
+                  ref.read(filtersProvider.notifier).setFilter(FilterCategory.isGlutenFree, val);
                 },
               ),
               SwitchListTile(
                 title: Text("Lactose-free"),
                 subtitle: Text("Only include lactose-free meals"),
-                value: isLactoseFree,
+                value: filterValue[FilterCategory.isLactoseFree]!,
                 onChanged: (val) {
-                  setState(() {
-                    isLactoseFree = val;
-                  });
+                  ref.read(filtersProvider.notifier).setFilter(FilterCategory.isLactoseFree, val);
                 },
               ),
               SwitchListTile(
                 title: Text("Vegetarian"),
                 subtitle: Text("Only include vegetarian meals"),
-                value: isVegetarianMeals,
+                value: filterValue[FilterCategory.isVegetarian]!,
                 onChanged: (val) {
-                  setState(() {
-                    isVegetarianMeals = val;
-                  });
+                  ref.read(filtersProvider.notifier).setFilter(FilterCategory.isVegetarian, val);
                 },
               ),
               SwitchListTile(
                 title: Text("Vegan"),
                 subtitle: Text("Only include vegan meals"),
-                value: isVeganMeals,
+                value: filterValue[FilterCategory.isVegan]!,
                 onChanged: (val) {
-                  setState(() {
-                    isVeganMeals = val;
-                  });
+                  ref.read(filtersProvider.notifier).setFilter(FilterCategory.isVegan, val);
                 },
               ),
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 }

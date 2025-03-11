@@ -1,27 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:section_8/model/meal.dart';
+import 'package:section_8/providers/favorites_provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class MealDetail extends StatefulWidget {
-  const MealDetail({super.key, required this.meal, required this.onToggleStar});
+class MealDetail extends ConsumerWidget {
+  const MealDetail({super.key, required this.meal});
 
   final Meal meal;
-  final void Function(Meal) onToggleStar;
 
   @override
-  State<MealDetail> createState() => _MealDetailState();
-}
-
-class _MealDetailState extends State<MealDetail> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.meal.title),
+        title: Text(meal.title),
         actions: [
           IconButton(
             onPressed: () {
-              widget.onToggleStar(widget.meal);
+              final wasAdded = ref
+                  .read(favoriteMealsProvider.notifier)
+                  .toggleMealFavoriteStatus(meal);
+              ScaffoldMessenger.of(context).clearSnackBars();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  duration: Duration(seconds: 2),
+                  content: Text(wasAdded ? "Meal added as a favorite." : "Meal is removed."),
+                ),
+              );
             },
             icon: Icon(Icons.star),
           ),
@@ -34,7 +39,7 @@ class _MealDetailState extends State<MealDetail> {
             children: [
               FadeInImage.memoryNetwork(
                 placeholder: kTransparentImage,
-                image: widget.meal.imageUrl,
+                image: meal.imageUrl,
                 fit: BoxFit.cover,
                 height: 200,
                 width: double.infinity,
@@ -49,7 +54,7 @@ class _MealDetailState extends State<MealDetail> {
                       fontSize: 20),
                 ),
               ),
-              for (final item in widget.meal.ingredients)
+              for (final item in meal.ingredients)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 2),
                   child: Text(
@@ -72,7 +77,7 @@ class _MealDetailState extends State<MealDetail> {
                   ),
                 ),
               ),
-              for (final item in widget.meal.steps)
+              for (final item in meal.steps)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 2),
                   child: Text(

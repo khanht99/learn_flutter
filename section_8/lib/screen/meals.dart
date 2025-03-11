@@ -5,11 +5,10 @@ import 'package:section_8/widget/meal_item.dart';
 
 class Meals extends StatelessWidget {
   const Meals(
-      {super.key, required this.meals, this.title, required this.onToggleStar});
+      {super.key, required this.meals, this.title});
 
   final List<Meal> meals;
   final String? title;
-  final void Function(Meal) onToggleStar;
 
   void _selectMeal(BuildContext context, Meal meal) {
     Navigator.of(context).push(
@@ -17,7 +16,6 @@ class Meals extends StatelessWidget {
         builder: (ctx) {
           return MealDetail(
             meal: meal,
-            onToggleStar: onToggleStar,
           );
         },
       ),
